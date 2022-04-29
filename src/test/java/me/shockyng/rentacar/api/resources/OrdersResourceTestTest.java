@@ -1,9 +1,9 @@
 package me.shockyng.rentacar.api.resources;
 
+import me.shockyng.rentacar.api.dtos.OrderDTO;
 import me.shockyng.rentacar.api.exceptions.CarNotFoundException;
-import me.shockyng.rentacar.api.records.OrderDTO;
 import me.shockyng.rentacar.api.service.OrdersService;
-import me.shockyng.rentacar.api.utils.AbstractResource;
+import me.shockyng.rentacar.api.utils.AbstractResourceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +14,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import static me.shockyng.rentacar.api.utils.DataTestProvider.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -28,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class OrdersResourceTest extends AbstractResource {
+class OrdersResourceTestTest extends AbstractResourceTest {
 
     @Mock
     private OrdersService service;
@@ -182,16 +180,5 @@ class OrdersResourceTest extends AbstractResource {
 
         verify(service).deleteOrder(pathParam);
         verify(service, times(1)).deleteOrder(pathParam);
-    }
-
-    private ArrayList<OrderDTO> getOrderList() {
-        return new ArrayList<>(Arrays.asList(
-                OrderDTO.builder().id(1L).date(LocalDateTime.now()).price(new BigDecimal(10)).build(),
-                OrderDTO.builder().id(2L).date(LocalDateTime.now()).price(new BigDecimal(20)).build()
-        ));
-    }
-
-    private OrderDTO getOrder(long id) {
-        return OrderDTO.builder().id(1L).date(LocalDateTime.now()).price(new BigDecimal(10)).build();
     }
 }

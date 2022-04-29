@@ -1,6 +1,6 @@
 package me.shockyng.rentacar.api.resources;
 
-import me.shockyng.rentacar.api.records.OrderDTO;
+import me.shockyng.rentacar.api.dtos.OrderDTO;
 import me.shockyng.rentacar.api.service.OrdersService;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;

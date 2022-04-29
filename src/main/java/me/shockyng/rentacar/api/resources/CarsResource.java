@@ -1,7 +1,6 @@
 package me.shockyng.rentacar.api.resources;
 
-import me.shockyng.rentacar.api.exceptions.CarNotFoundException;
-import me.shockyng.rentacar.api.records.CarDTO;
+import me.shockyng.rentacar.api.dtos.CarDTO;
 import me.shockyng.rentacar.api.service.CarsService;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;

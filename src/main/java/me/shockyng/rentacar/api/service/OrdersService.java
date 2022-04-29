@@ -2,7 +2,7 @@ package me.shockyng.rentacar.api.service;
 
 import me.shockyng.rentacar.api.exceptions.OrderNotFoundException;
 import me.shockyng.rentacar.api.models.Order;
-import me.shockyng.rentacar.api.records.OrderDTO;
+import me.shockyng.rentacar.api.dtos.OrderDTO;
 import me.shockyng.rentacar.api.repository.OrdersRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

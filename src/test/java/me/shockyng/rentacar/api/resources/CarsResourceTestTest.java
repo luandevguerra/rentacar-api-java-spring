@@ -1,9 +1,10 @@
 package me.shockyng.rentacar.api.resources;
 
 import me.shockyng.rentacar.api.exceptions.CarNotFoundException;
-import me.shockyng.rentacar.api.records.CarDTO;
+import me.shockyng.rentacar.api.dtos.CarDTO;
 import me.shockyng.rentacar.api.service.CarsService;
-import me.shockyng.rentacar.api.utils.AbstractResource;
+import me.shockyng.rentacar.api.utils.AbstractResourceTest;
+import me.shockyng.rentacar.api.utils.DataTestProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,16 +18,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import static me.shockyng.rentacar.api.utils.DataTestProvider.getCarDTO;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class CarsResourceTest extends AbstractResource {
+class CarsResourceTestTest extends AbstractResourceTest {
 
     @Mock
     private CarsService service;
@@ -49,7 +50,7 @@ class CarsResourceTest extends AbstractResource {
 
     @Test
     void shouldReturnAListWithCars() throws Exception {
-        ArrayList<CarDTO> carList = getCarList();
+        ArrayList<CarDTO> carList = DataTestProvider.getCarDTOList();
 
         when(service.getCars()).thenReturn(carList);
 
@@ -80,7 +81,7 @@ class CarsResourceTest extends AbstractResource {
     @Test
     void shouldReturn200CodeAndACar() throws Exception {
         long pathParam = 1L;
-        CarDTO car = getCar(pathParam);
+        CarDTO car = getCarDTO(pathParam);
         when(service.getCar(anyLong())).thenReturn(car);
 
         mockMvc.perform(get(getPath() + "/" + pathParam).contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +109,7 @@ class CarsResourceTest extends AbstractResource {
 
     @Test
     void shouldReturn201CodeAndACarOnResponseOnceACarWasCreated() throws Exception {
-        CarDTO car = getCar(1L);
+        CarDTO car = getCarDTO(1L);
 
         when(service.createCar(any(CarDTO.class))).thenReturn(car);
 
@@ -125,7 +126,7 @@ class CarsResourceTest extends AbstractResource {
     @Test
     void shouldReturn201CodeAndACarOnResponseOnceACarWasUpdated() throws Exception {
         long pathParam = 1L;
-        CarDTO car = getCar(pathParam);
+        CarDTO car = getCarDTO(pathParam);
 
         when(service.updateCar(anyLong(), any(CarDTO.class))).thenReturn(car);
 
@@ -144,7 +145,7 @@ class CarsResourceTest extends AbstractResource {
     @Test
     void shouldReturn204CodeOnceNoCarWasFoundWhenUpdateCarIsCalled() throws Exception {
         long pathParam = 1L;
-        CarDTO car = getCar(pathParam);
+        CarDTO car = getCarDTO(pathParam);
 
         when(service.updateCar(anyLong(), any(CarDTO.class))).thenThrow(NoSuchElementException.class);
 
@@ -179,17 +180,6 @@ class CarsResourceTest extends AbstractResource {
 
         verify(service).deleteCar(pathParam);
         verify(service, times(1)).deleteCar(pathParam);
-    }
-
-    private ArrayList<CarDTO> getCarList() {
-        return new ArrayList<>(Arrays.asList(
-                CarDTO.builder().id(1L).name("Gol").licensePlate("JHS-9860").build(),
-                CarDTO.builder().id(2L).name("Argo").licensePlate("NEY-4856").build()
-        ));
-    }
-
-    private CarDTO getCar(long id) {
-        return new CarDTO(id, "nameExample", "licensePlateExample");
     }
 
 }

@@ -1,4 +1,4 @@
-package me.shockyng.rentacar.api.records;
+package me.shockyng.rentacar.api.dtos;
 
 import lombok.Builder;
 import lombok.Data;

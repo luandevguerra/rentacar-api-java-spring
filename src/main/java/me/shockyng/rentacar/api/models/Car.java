@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.util.Objects;
 
+@Builder
 @Getter
 @Setter
 @ToString
@@ -23,6 +24,15 @@ public class Car {
 
         @Column(name = "car_license_plate")
         private String licensePlate;
+
+        public Car(Long id, String name, String licensePlate) {
+                this.id = id;
+                this.name = name;
+                this.licensePlate = licensePlate;
+        }
+
+        public Car() {
+        }
 
         @Override
         public boolean equals(Object o) {
