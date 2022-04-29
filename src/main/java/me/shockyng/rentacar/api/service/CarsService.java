@@ -5,6 +5,7 @@ import me.shockyng.rentacar.api.models.Car;
 import me.shockyng.rentacar.api.records.CarDTO;
 import me.shockyng.rentacar.api.repository.CarsRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class CarsService {
 
-    private final ModelMapper mapper  = new ModelMapper();
+    private final ModelMapper mapper = new ModelMapper();
 
     private final CarsRepository repository;
 
@@ -31,13 +32,11 @@ public class CarsService {
     }
 
     public CarDTO getCar(Long id) {
-        Optional<Car> optionalCar = repository.findById(id);
-        if (optionalCar.isEmpty()) throw new CarNotFoundException();
-        else return mapper.map(optionalCar.get(), CarDTO.class);
+        return mapper.map(repository.findById(id).get(), CarDTO.class);
     }
 
     public CarDTO createCar(CarDTO car) {
-        return mapper.map(repository.save(mapper.map(car, Car.class)), CarDTO.class) ;
+        return mapper.map(repository.save(mapper.map(car, Car.class)), CarDTO.class);
     }
 
     public CarDTO updateCar(Long id, CarDTO carDTO) {
