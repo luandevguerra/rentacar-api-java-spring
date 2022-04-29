@@ -2,12 +2,16 @@ package me.shockyng.rentacar.api.resources;
 
 import me.shockyng.rentacar.api.records.OrderDTO;
 import me.shockyng.rentacar.api.service.OrdersService;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/v1/orders")
 public class OrdersResource {
 
     private final OrdersService service;
@@ -22,23 +26,37 @@ public class OrdersResource {
     }
 
     @GetMapping("/{id}")
-    public OrderDTO getOrder(@PathVariable("id") Long id) {
-        return service.getOrder(id);
+    public ResponseEntity<OrderDTO> getOrder(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(service.getOrder(id), HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
     }
 
     @PostMapping
-    public OrderDTO createOrder(@RequestBody OrderDTO orderDTO) {
-        return service.createOrder(orderDTO);
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+        return new ResponseEntity<>(service.createOrder(orderDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public OrderDTO updateOrder(@PathVariable("id") Long id, @RequestBody OrderDTO orderDTO) {
-        return service.updateOrder(id, orderDTO);
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable("id") Long id, @RequestBody OrderDTO orderDTO) {
+        try {
+            return new ResponseEntity<>(service.updateOrder(id, orderDTO), HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteOrder(@PathVariable("id") Long id) {
-        service.deleteOrder(id);
+    public ResponseEntity<OrderDTO> deleteOrder(@PathVariable("id") Long id) {
+        try {
+            service.deleteOrder(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EmptyResultDataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
 

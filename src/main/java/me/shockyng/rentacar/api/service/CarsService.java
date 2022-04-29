@@ -5,12 +5,10 @@ import me.shockyng.rentacar.api.models.Car;
 import me.shockyng.rentacar.api.records.CarDTO;
 import me.shockyng.rentacar.api.repository.CarsRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

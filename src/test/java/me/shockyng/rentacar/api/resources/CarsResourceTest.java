@@ -1,9 +1,9 @@
 package me.shockyng.rentacar.api.resources;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import me.shockyng.rentacar.api.exceptions.CarNotFoundException;
 import me.shockyng.rentacar.api.records.CarDTO;
 import me.shockyng.rentacar.api.service.CarsService;
+import me.shockyng.rentacar.api.utils.AbstractResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,11 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class CarsResourceTest {
-
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    private final String URI = "/v1/cars";
+class CarsResourceTest extends AbstractResource {
 
     @Mock
     private CarsService service;
@@ -40,6 +36,11 @@ class CarsResourceTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Override
+    protected String getPath() {
+        return "/v1/cars";
+    }
 
     @BeforeEach
     void setUp() {
@@ -52,7 +53,7 @@ class CarsResourceTest {
 
         when(service.getCars()).thenReturn(carList);
 
-        mockMvc.perform(get(URI).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(getPath()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(carList.get(0).getId()))
                 .andExpect(jsonPath("$[0].name").value(carList.get(0).getName()))
@@ -70,7 +71,7 @@ class CarsResourceTest {
     void shouldReturn204CodeOnceNoCarsWereFoundWhenGetCarsWasCalled() throws Exception {
         when(service.getCars()).thenThrow(CarNotFoundException.class);
 
-        mockMvc.perform(get(URI)).andExpect(status().isNoContent());
+        mockMvc.perform(get(getPath())).andExpect(status().isNoContent());
 
         verify(service).getCars();
         verify(service, times(1)).getCars();
@@ -82,7 +83,7 @@ class CarsResourceTest {
         CarDTO car = getCar(pathParam);
         when(service.getCar(anyLong())).thenReturn(car);
 
-        mockMvc.perform(get(URI + "/" + pathParam).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(get(getPath() + "/" + pathParam).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(car)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(car.getId()))
@@ -98,7 +99,7 @@ class CarsResourceTest {
         long pathParam = 1L;
         when(service.getCar(anyLong())).thenThrow(NoSuchElementException.class);
 
-        mockMvc.perform(get(URI + "/" + pathParam)).andExpect(status().isNoContent());
+        mockMvc.perform(get(getPath() + "/" + pathParam)).andExpect(status().isNoContent());
 
         verify(service).getCar(pathParam);
         verify(service, times(1)).getCar(pathParam);
@@ -111,7 +112,7 @@ class CarsResourceTest {
 
         when(service.createCar(any(CarDTO.class))).thenReturn(car);
 
-        mockMvc.perform(post(URI).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(car)))
+        mockMvc.perform(post(getPath()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(car)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(car.getName()))
                 .andExpect(jsonPath("$.licensePlate").value(car.getLicensePlate()))
@@ -128,7 +129,7 @@ class CarsResourceTest {
 
         when(service.updateCar(anyLong(), any(CarDTO.class))).thenReturn(car);
 
-        mockMvc.perform(put(URI + "/" + pathParam).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put(getPath() + "/" + pathParam).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(car)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(car.getId()))
@@ -147,7 +148,7 @@ class CarsResourceTest {
 
         when(service.updateCar(anyLong(), any(CarDTO.class))).thenThrow(NoSuchElementException.class);
 
-        mockMvc.perform(put(URI + "/" + pathParam).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put(getPath() + "/" + pathParam).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(car)))
                 .andExpect(status().isNoContent())
                 .andReturn();
@@ -162,7 +163,7 @@ class CarsResourceTest {
 
         doNothing().when(service).deleteCar(anyLong());
 
-        mockMvc.perform(delete(URI + "/" + pathParam)).andExpect(status().isOk());
+        mockMvc.perform(delete(getPath() + "/" + pathParam)).andExpect(status().isOk());
 
         verify(service).deleteCar(pathParam);
         verify(service, times(1)).deleteCar(pathParam);
@@ -174,7 +175,7 @@ class CarsResourceTest {
 
         doThrow(EmptyResultDataAccessException.class).when(service).deleteCar(anyLong());
 
-        mockMvc.perform(delete(URI + "/" + pathParam)).andExpect(status().isNoContent());
+        mockMvc.perform(delete(getPath() + "/" + pathParam)).andExpect(status().isNoContent());
 
         verify(service).deleteCar(pathParam);
         verify(service, times(1)).deleteCar(pathParam);
@@ -190,4 +191,5 @@ class CarsResourceTest {
     private CarDTO getCar(long id) {
         return new CarDTO(id, "nameExample", "licensePlateExample");
     }
+
 }
