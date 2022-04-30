@@ -3,6 +3,7 @@ package me.shockyng.rentacar.api.utils;
 import me.shockyng.rentacar.api.dtos.CarDTO;
 import me.shockyng.rentacar.api.dtos.OrderDTO;
 import me.shockyng.rentacar.api.models.Car;
+import me.shockyng.rentacar.api.models.Order;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -33,15 +34,26 @@ public class DataTestProvider {
         return new Car(id, "nameExample", "licensePlateExample");
     }
 
-    public static ArrayList<OrderDTO> getOrderList() {
+    public static ArrayList<OrderDTO> getOrderDTOList() {
         return new ArrayList<>(Arrays.asList(
                 OrderDTO.builder().id(1L).date(LocalDateTime.now()).price(new BigDecimal(10)).build(),
                 OrderDTO.builder().id(2L).date(LocalDateTime.now()).price(new BigDecimal(20)).build()
         ));
     }
 
-    public static OrderDTO getOrder(long id) {
+    public static OrderDTO getOrderDTO(long id) {
         return OrderDTO.builder().id(1L).date(LocalDateTime.now()).price(new BigDecimal(10)).build();
+    }
+
+    public static ArrayList<Order> getOrderList() {
+        return new ArrayList<>(Arrays.asList(
+                Order.builder().id(1L).date(LocalDateTime.now()).price(new BigDecimal(10)).build(),
+                Order.builder().id(2L).date(LocalDateTime.now()).price(new BigDecimal(20)).build()
+        ));
+    }
+
+    public static Order getOrder(long id) {
+        return Order.builder().id(1L).date(LocalDateTime.now()).price(new BigDecimal(10)).build();
     }
 
     public static ArrayList<Object> getDateAsStringArray(LocalDateTime date) {

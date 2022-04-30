@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.util.*;
 
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CarsServiceTest {
+
+    private final ModelMapper mapper = new ModelMapper();
 
     @Mock
     private CarsRepository repository;
@@ -33,11 +36,13 @@ class CarsServiceTest {
 
         when(repository.findAll()).thenReturn(carList);
 
-        ArrayList<CarDTO> cars = service.getCars();
+        ArrayList<CarDTO> carListDTO = service.getCars();
 
-        assertEquals(carList.get(0).getId(), cars.get(0).getId());
-        assertEquals(carList.get(0).getName(), cars.get(0).getName());
-        assertEquals(carList.get(0).getLicensePlate(), cars.get(0).getLicensePlate());
+        assertEquals(carList.size(), carListDTO.size());
+        assertEquals(carList.get(0).getId(), carListDTO.get(0).getId());
+        assertEquals(carList.get(0).getId(), carListDTO.get(0).getId());
+        assertEquals(carList.get(0).getName(), carListDTO.get(0).getName());
+        assertEquals(carList.get(0).getLicensePlate(), carListDTO.get(0).getLicensePlate());
     }
 
     @Test
@@ -74,7 +79,7 @@ class CarsServiceTest {
     void shouldReturnACarWhenCreateCarIsCalled() {
         long id = 1L;
         Car car = DataTestProvider.getCar(id);
-        CarDTO carDTO = DataTestProvider.getCarDTO(id);
+        CarDTO carDTO = mapper.map(car, CarDTO.class);
 
         when(repository.save(car)).thenReturn(car);
 

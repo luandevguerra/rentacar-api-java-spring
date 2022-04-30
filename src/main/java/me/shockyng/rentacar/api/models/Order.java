@@ -1,9 +1,6 @@
 package me.shockyng.rentacar.api.models;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,8 +9,8 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
 @ToString
-@RequiredArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -28,6 +25,15 @@ public class Order {
 
         @Column(name = "order_date")
         private LocalDateTime date;
+
+        public Order(Long id, BigDecimal price, LocalDateTime date) {
+                this.id = id;
+                this.price = price;
+                this.date = date;
+        }
+
+        public Order() {
+        }
 
         @Override
         public boolean equals(Object o) {

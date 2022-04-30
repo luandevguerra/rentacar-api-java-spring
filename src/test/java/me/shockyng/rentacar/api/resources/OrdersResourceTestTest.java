@@ -46,7 +46,7 @@ class OrdersResourceTestTest extends AbstractResourceTest {
 
     @Test
     void shouldReturnAListWithOrders() throws Exception {
-        ArrayList<OrderDTO> orderList = getOrderList();
+        ArrayList<OrderDTO> orderList = getOrderDTOList();
 
         when(service.getOrders()).thenReturn(orderList);
 
@@ -77,7 +77,7 @@ class OrdersResourceTestTest extends AbstractResourceTest {
     @Test
     void shouldReturn200CodeAndACar() throws Exception {
         long pathParam = 1L;
-        OrderDTO order = getOrder(pathParam);
+        OrderDTO order = getOrderDTO(pathParam);
         when(service.getOrder(anyLong())).thenReturn(order);
 
         mockMvc.perform(get(getPath() + "/" + pathParam).contentType(MediaType.APPLICATION_JSON)
@@ -105,7 +105,7 @@ class OrdersResourceTestTest extends AbstractResourceTest {
 
     @Test
     void shouldReturn201CodeAndACarOnResponseOnceACarWasCreated() throws Exception {
-        OrderDTO order = getOrder(1L);
+        OrderDTO order = getOrderDTO(1L);
 
         when(service.createOrder(any(OrderDTO.class))).thenReturn(order);
 
@@ -123,12 +123,9 @@ class OrdersResourceTestTest extends AbstractResourceTest {
     @Test
     void shouldReturn201CodeAndACarOnResponseOnceACarWasUpdated() throws Exception {
         long pathParam = 1L;
-        OrderDTO order = getOrder(pathParam);
+        OrderDTO order = getOrderDTO(pathParam);
 
         when(service.updateOrder(anyLong(), any(OrderDTO.class))).thenReturn(order);
-
-
-
 
         mockMvc.perform(put(getPath() + "/" + pathParam).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(order)))
@@ -145,7 +142,7 @@ class OrdersResourceTestTest extends AbstractResourceTest {
     @Test
     void shouldReturn204CodeOnceNoCarWasFoundWhenUpdateCarIsCalled() throws Exception {
         long pathParam = 1L;
-        OrderDTO order = getOrder(pathParam);
+        OrderDTO order = getOrderDTO(pathParam);
 
         when(service.updateOrder(anyLong(), any(OrderDTO.class))).thenThrow(NoSuchElementException.class);
 
