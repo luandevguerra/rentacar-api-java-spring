@@ -39,3 +39,25 @@ spring:
   config:
     activate:
       on-profile: dev
+
+---
+
+# test profile
+
+server:
+  servlet:
+    context-path: '/api'
+  port: '8080'
+
+spring:
+  jpa:
+    generate-ddl: false
+  datasource:
+    url: jdbc:postgresql://localhost:5433/rentacardb
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password : rentacardbpsw
+
+  config:
+    activate:
+      on-profile: test
