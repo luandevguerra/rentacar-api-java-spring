@@ -1,12 +1,9 @@
 package me.luandevguerra.rentacar.api.integration.cars;
 
-import io.cucumber.java.en.Given;
 import io.cucumber.java8.En;
 import me.luandevguerra.rentacar.api.models.Car;
 import me.luandevguerra.rentacar.api.repository.CarsRepository;
 import me.luandevguerra.rentacar.api.service.CarsService;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,14 +15,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
-import static me.luandevguerra.rentacar.api.utils.IntegrationContextData.resetData;
+import java.util.List;
+
 import static me.luandevguerra.rentacar.api.utils.IntegrationContextData.getContextData;
 import static me.luandevguerra.rentacar.api.utils.IntegrationContextData.setContextData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
